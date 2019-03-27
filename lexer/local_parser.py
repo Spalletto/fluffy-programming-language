@@ -1,4 +1,4 @@
-import lexer as lx
+from lexer import *
 
 class Expression:
     def evaluate(self):
@@ -76,12 +76,12 @@ class Parser:
         if self.position < len(self.tokens):
             return self.tokens[self.position]
         else: 
-            return lx.Token('EOF', 'EOF')
+            return Token('EOF', 'EOF')
 
     def parse(self):
         result = []
 
-        while not self.match(lx.TokenType['EOF']):
+        while not self.match(TOKENS['EOF']):
             result.append(self.expression())
         
         return result
@@ -92,14 +92,11 @@ class Parser:
     def additive(self):
         result = self.multiplicative()
         while True:
-            token = self.current_token
-            if self.match(lx.TokenType['+']):
-                self.position += 1
+            if self.match(TOKENS['+']):
                 expression = BinaryExpression('+', result, self.multiplicative())
                 result = expression.evaluate()
                 continue
-            elif self.match(lx.TokenType['-']):
-                self.position += 1
+            elif self.match(TOKENS['-']):
                 expression = BinaryExpression('-', result, self.multiplicative())
                 result = expression.evaluate()
                 continue
@@ -110,13 +107,11 @@ class Parser:
     def multiplicative(self):
         result = self.unary()
         while True:
-            if self.match(lx.TokenType['*']):
-                self.position += 1
+            if self.match(TOKENS['*']):
                 expression = BinaryExpression('*', result, self.unary())
                 result = expression.evaluate()
                 continue
-            elif self.match(lx.TokenType['/']):
-                self.position += 1
+            elif self.match(TOKENS['/']):
                 expression = BinaryExpression('/', result, self.unary())
                 result = expression.evaluate()
                 continue
@@ -125,12 +120,10 @@ class Parser:
         return result
 
     def unary(self):
-        if self.match(lx.TokenType['-']):
-            self.position += 1
+        if self.match(TOKENS['-']):
             expression = UnaryExpression('-', self.primary())
             return expression.evaluate()
-        elif self.match(lx.TokenType['+']):
-            self.position += 1
+        elif self.match(TOKENS['+']):
             expression = UnaryExpression('+', self.primary())
             return expression.evaluate()
 
@@ -138,9 +131,12 @@ class Parser:
     
     def primary(self):
         token = self.current_token
-        if self.match(lx.TokenType["NUMBER"]):
-            self.position += 1
+        if self.match('NUMBER'):
             return NumberExpression(token.value)
+        elif self.match('LPAREN'):
+            result = self.expression()
+            self.match('RPAREN')
+            return result
         else:
             raise RuntimeError("Unknown Expression")
 
@@ -148,12 +144,13 @@ class Parser:
         if self.current_token.token_type != token_type:
             return False
         else:
+            self.position += 1
             return True 
 
     def get(self, relative_position):
         position = self.position + relative_position
         if position > len(self.tokens):
-            return lx.TokenType['EOF']
+            return TOKENS['EOF']
         else:
             return self.tokens[position]
 

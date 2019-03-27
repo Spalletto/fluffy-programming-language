@@ -1,9 +1,11 @@
-TokenType = {
+TOKENS = {
     'NUMBER': 'NUMBER',
     '+' : 'PLUS', 
     '-' : 'MINUS', 
     '*' : 'MULTIPLY', 
     '/' : 'DIVIDE',
+    '(' : 'LPAREN',
+    ')' : 'RPAREN',
     'EOF': 'EOF',
 }
 
@@ -19,7 +21,7 @@ class Token:
         return self.__str__()
 
 class Lexer:
-    OPERATORS = ('+', '-', '*', '/')
+    OPERATORS = ('+', '-', '*', '/', '(', ')')
     
     def __init__(self, text):
         self.text = text
@@ -51,10 +53,10 @@ class Lexer:
             number_string += self.current_char
             self.next_char()
 
-        self.add_token(TokenType["NUMBER"], int(number_string))
+        self.add_token(TOKENS["NUMBER"], int(number_string))
 
     def tokenize_operator(self):
-        self.add_token(TokenType[self.current_char], self.current_char)
+        self.add_token(TOKENS[self.current_char], self.current_char)
         self.next_char()
 
     def next_char(self):
