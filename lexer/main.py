@@ -2,7 +2,7 @@ from lexer import Lexer
 from local_parser import Parser
 
 if __name__ == "__main__":
-    input_text = '(2+4)*10'
+    input_text = '(PI)*10'
     lexer = Lexer(input_text)
     tokens = lexer.tokenize()
     print(tokens)

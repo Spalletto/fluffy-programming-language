@@ -1,5 +1,6 @@
 TOKENS = {
-    'NUMBER': 'NUMBER',
+    'NUMBER' : 'NUMBER',
+    'WORD' : 'WORD',
     '+' : 'PLUS', 
     '-' : 'MINUS', 
     '*' : 'MULTIPLY', 
@@ -39,6 +40,8 @@ class Lexer:
         while self.position < len(self.text):
             if self.current_char.isdigit():
                 self.tokenize_number()
+            elif self.current_char.isalpha():
+                self.tokenize_word()
             elif self.current_char in self.OPERATORS:
                 self.tokenize_operator()
             else:
@@ -46,7 +49,6 @@ class Lexer:
 
         return self.tokens
                  
-
     def tokenize_number(self):
         number_string = ""
         while self.current_char.isdigit():
@@ -54,6 +56,14 @@ class Lexer:
             self.next_char()
 
         self.add_token(TOKENS["NUMBER"], int(number_string))
+
+    def tokenize_word(self):
+        word_string = ""
+        while self.current_char.isalnum():
+            word_string += self.current_char
+            self.next_char()
+
+        self.add_token(TOKENS["WORD"], word_string)
 
     def tokenize_operator(self):
         self.add_token(TOKENS[self.current_char], self.current_char)
