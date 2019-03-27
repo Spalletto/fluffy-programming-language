@@ -8,12 +8,12 @@ TokenType = {
 }
 
 class Token:
-    def __init__(self, token_type, text):
+    def __init__(self, token_type, value):
         self.token_type = token_type
-        self.text = text
+        self.value = value
     
     def __str__(self):
-        return f"TOKEN({self.token_type}, {self.text})"
+        return f"TOKEN({self.token_type}, {self.value})"
     
     def __repr__(self):
         return self.__str__()
@@ -72,6 +72,6 @@ class Lexer:
 
 
 if __name__ == "__main__":
-    input_text = '2+2'
+    input_text = '2+223'
     lexer = Lexer(input_text)
     print(lexer.tokenize())
