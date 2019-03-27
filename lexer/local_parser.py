@@ -19,6 +19,26 @@ class NumberExpression(Expression):
         return self.__str__()
 
 
+class UnaryExpression(Expression):
+    def __init__(self, operator, value1):
+        self.operator = operator
+        self.value1 = value1
+
+    def evaluate(self):
+        if self.operator is '+':
+            return int(self.value1) 
+        elif self.operator is '-':
+            return -int(self.value1)
+    
+    def __str__(self):
+        return "UnaryExp('{}', '{}')".format(
+            self.operator, self.value1
+        )
+
+    def __repr__(self):
+        return self.__str__()
+
+
 class BinaryExpression(Expression):
     def __init__(self, operator, value1, value2):
         self.operator = operator
@@ -105,6 +125,15 @@ class Parser:
         return result
 
     def unary(self):
+        if self.match(lx.TokenType['-']):
+            self.position += 1
+            expression = UnaryExpression('-', self.primary())
+            return expression.evaluate()
+        elif self.match(lx.TokenType['+']):
+            self.position += 1
+            expression = UnaryExpression('+', self.primary())
+            return expression.evaluate()
+
         return self.primary()
     
     def primary(self):
