@@ -1,4 +1,4 @@
-from constants import *
+from variables import *
 
 
 class Expression:
@@ -25,8 +25,8 @@ class ConstantExpression(Expression):
         self.name = name
 
     def evaluate(self):
-        const = Constants()
-        result = const.get(self.name)
+        vars = Variables()
+        result = vars.get(self.name)
         if result is 0: 
             raise NameError("Constant doesn't exist")
         else: 

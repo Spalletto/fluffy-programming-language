@@ -1,5 +1,6 @@
 from lexer import *
 from expressions import *
+from statement import *
 
 
 class Parser:
@@ -18,9 +19,21 @@ class Parser:
         result = []
 
         while not self.match(TOKENS['EOF']):
-            result.append(self.expression())
+            result.append(self.statement())
         
         return result
+
+    def statement(self):
+        return self.assignment_statement()
+
+    def assignment_statement(self):
+        if self.current_token.token_type == 'WORD' and self.get(1).token_type == "EQUAL":
+            variable_name = self.current_token.value
+            self.match('WORD')
+            self.match("EQUAL")
+            return AssignStatement(variable_name, self.expression())
+        
+        raise RuntimeError("Error when assignment")
 
     def expression(self):
         return self.additive()

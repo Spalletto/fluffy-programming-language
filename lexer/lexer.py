@@ -7,6 +7,7 @@ TOKENS = {
     '/' : 'DIVIDE',
     '(' : 'LPAREN',
     ')' : 'RPAREN',
+    '=' : 'EQUAL',
     'EOF': 'EOF',
 }
 
@@ -22,7 +23,7 @@ class Token:
         return self.__str__()
 
 class Lexer:
-    OPERATORS = ('+', '-', '*', '/', '(', ')')
+    OPERATORS = ('+', '-', '*', '/', '(', ')', '=')
     
     def __init__(self, text):
         self.text = text
