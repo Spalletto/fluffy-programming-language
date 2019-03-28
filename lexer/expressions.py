@@ -74,7 +74,7 @@ class BinaryExpression(Expression):
             return int(self.value1) * int(self.value2)
         elif self.operator is '/':
             if self.value2 == 0: raise ZeroDivisionError()
-            return int(self.value1) / int(self.value2)
+            return int(self.value1) // int(self.value2)
         else:
             raise TypeError("Unknown operator")
     

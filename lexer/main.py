@@ -2,7 +2,8 @@ from lexer import Lexer
 from local_parser import Parser
 
 if __name__ == "__main__":
-    input_text = 'name = 2+2*10'
+    input_text = """name = 2+2*10\n
+                    name2 = 50/10+3"""
     lexer = Lexer(input_text)
     tokens = lexer.tokenize()
     print(tokens)

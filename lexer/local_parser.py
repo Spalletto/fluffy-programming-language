@@ -27,10 +27,9 @@ class Parser:
         return self.assignment_statement()
 
     def assignment_statement(self):
-        if self.current_token.token_type == 'WORD' and self.get(1).token_type == "EQUAL":
-            variable_name = self.current_token.value
-            self.match('WORD')
-            self.match("EQUAL")
+        variable_name = self.current_token.value
+        if self.match('WORD') and self.get(0).token_type == "EQUAL":
+            self.consume("EQUAL")
             return AssignStatement(variable_name, self.expression())
         
         raise RuntimeError("Error when assignment")
@@ -91,6 +90,13 @@ class Parser:
             return result
         else:
             raise RuntimeError("Unknown Expression")
+
+    def consume(self, token_type):
+        if self.current_token.token_type != token_type:
+            raise RuntimeError(f"Token {self.current_token.token_type} doesn't match {token_type}.")
+        else:
+            self.position += 1
+            return self.current_token 
 
     def match(self, token_type):
         if self.current_token.token_type != token_type:

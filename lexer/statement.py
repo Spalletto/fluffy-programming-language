@@ -21,5 +21,6 @@ class AssignStatement(Statement):
         return "AssignStatement({}: {})".format(
             self.variable, self.result
         )
+        
     def print_vars(self):
         print(self.vars.VARIABLES)
