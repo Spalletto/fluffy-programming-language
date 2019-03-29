@@ -9,6 +9,7 @@ TOKENS = {
     ')' : 'RPAREN',
     '=' : 'EQUAL',
     'EOF': 'EOF',
+    'PRINT' : 'PRINT', 
 }
 
 class Token:
@@ -63,8 +64,11 @@ class Lexer:
         while self.current_char.isalnum():
             word_string += self.current_char
             self.next_char()
-
-        self.add_token(TOKENS["WORD"], word_string)
+        
+        if word_string == 'print':
+            self.add_token(TOKENS["PRINT"], word_string)
+        else:
+            self.add_token(TOKENS["WORD"], word_string)
 
     def tokenize_operator(self):
         self.add_token(TOKENS[self.current_char], self.current_char)

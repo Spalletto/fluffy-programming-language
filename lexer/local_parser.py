@@ -24,6 +24,8 @@ class Parser:
         return result
 
     def statement(self):
+        if self.match('PRINT'):
+            return PrintStatement(self.expression())
         return self.assignment_statement()
 
     def assignment_statement(self):

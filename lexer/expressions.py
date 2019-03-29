@@ -12,6 +12,9 @@ class NumberExpression(Expression):
     
     def __int__(self):
         return self.number
+    
+    def evaluate(self):
+        return self.number
 
     def __str__(self):
         return "NumberExp({})".format(self.number)
@@ -20,14 +23,15 @@ class NumberExpression(Expression):
         return self.__str__()
 
 
+vars = Variables()
 class ConstantExpression(Expression):
     def __init__(self, name):
         self.name = name
 
     def evaluate(self):
-        vars = Variables()
-        result = vars.get(self.name)
-        if result is 0: 
+        print(self.name, vars.VARIABLES)
+        result = vars.VARIABLES.get(self.name)
+        if result is None: 
             raise NameError("Constant doesn't exist")
         else: 
             return result
@@ -46,9 +50,9 @@ class UnaryExpression(Expression):
 
     def evaluate(self):
         if self.operator is '+':
-            return int(self.value1) 
+            return self.value1
         elif self.operator is '-':
-            return -int(self.value1)
+            return -self.value1
     
     def __str__(self):
         return "UnaryExp('{}', '{}')".format(
@@ -64,17 +68,21 @@ class BinaryExpression(Expression):
         self.operator = operator
         self.value1 = value1
         self.value2 = value2
-
+        if type(value1) is int:
+            self.value1 = NumberExpression(value1)
+        if type(value2) is int:
+            self.value2 = NumberExpression(value2)
+        
     def evaluate(self):
         if self.operator is '+':
-            return int(self.value1) + int(self.value2) 
+            return self.value1.evaluate() + self.value2.evaluate() 
         elif self.operator is '-':
-            return int(self.value1) - int(self.value2)
+            return self.value1.evaluate() - self.value2.evaluate() 
         elif self.operator is '*':
-            return int(self.value1) * int(self.value2)
+            return self.value1.evaluate() * self.value2.evaluate() 
         elif self.operator is '/':
             if self.value2 == 0: raise ZeroDivisionError()
-            return int(self.value1) // int(self.value2)
+            return self.value1.evaluate() // self.value2.evaluate() 
         else:
             raise TypeError("Unknown operator")
     
