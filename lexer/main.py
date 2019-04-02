@@ -11,4 +11,4 @@ if __name__ == "__main__":
     statements = parser.parse()
     for s in statements:
         s.execute()
-        print(s)
+        #print(s)

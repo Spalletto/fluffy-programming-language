@@ -18,7 +18,7 @@ class Token:
         self.value = value
     
     def __str__(self):
-        return f"TOKEN({self.token_type}, {self.value})"
+        return "TOKEN({}, {})".format(self.token_type, self.value)
     
     def __repr__(self):
         return self.__str__()
@@ -86,9 +86,3 @@ class Lexer:
 
     def add_token(self, token_type, text=None):
         self.tokens.append(Token(token_type, text))
-
-
-if __name__ == "__main__":
-    input_text = '2+223'
-    lexer = Lexer(input_text)
-    print(lexer.tokenize())

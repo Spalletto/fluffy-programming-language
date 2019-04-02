@@ -1,9 +1,5 @@
 class Variables:
-    VARIABLES = {
-        'PI' : 3.14,
-        'E' : 2.78,
-        'GR' : 1.618
-    }
+    VARIABLES = {}
 
     def isExists(self, key):
         return False if self.VARIABLES.get(key) is None else True
@@ -13,3 +9,5 @@ class Variables:
 
     def add(self, key, value):
         self.VARIABLES[key] = value
+
+variables = Variables()

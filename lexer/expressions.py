@@ -23,14 +23,12 @@ class NumberExpression(Expression):
         return self.__str__()
 
 
-vars = Variables()
 class ConstantExpression(Expression):
     def __init__(self, name):
         self.name = name
 
     def evaluate(self):
-        print(self.name, vars.VARIABLES)
-        result = vars.VARIABLES.get(self.name)
+        result = variables.VARIABLES.get(self.name)
         if result is None: 
             raise NameError("Constant doesn't exist")
         else: 

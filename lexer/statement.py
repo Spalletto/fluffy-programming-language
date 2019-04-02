@@ -10,13 +10,11 @@ class AssignStatement(Statement):
     def __init__(self, variable, expression):
         self.variable = variable
         self.expression = expression
-        self.vars = Variables()
         self.result = 0
     
     def execute(self):
         self.result = int(self.expression)
-        self.vars.add(self.variable, self.result)
-        self.print_vars()
+        variables.add(self.variable, self.result)
 
     def __str__(self):
         return "AssignStatement({}: {})".format(
@@ -24,7 +22,7 @@ class AssignStatement(Statement):
         )
 
     def print_vars(self):
-        print(self.vars.VARIABLES)
+        print(variables.VARIABLES)
 
 class PrintStatement(Statement):
     def __init__(self, expression):
@@ -33,7 +31,6 @@ class PrintStatement(Statement):
             self.expression = NumberExpression(expression)
 
     def execute(self):
-        print(vars.VARIABLES)
         print(self.expression.evaluate())
 
     def __str__(self):

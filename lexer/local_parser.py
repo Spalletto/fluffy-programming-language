@@ -32,7 +32,9 @@ class Parser:
         variable_name = self.current_token.value
         if self.match('WORD') and self.get(0).token_type == "EQUAL":
             self.consume("EQUAL")
-            return AssignStatement(variable_name, self.expression())
+            result = AssignStatement(variable_name, self.expression())
+            result.execute()
+            return result
         
         raise RuntimeError("Error when assignment")
 
@@ -95,7 +97,7 @@ class Parser:
 
     def consume(self, token_type):
         if self.current_token.token_type != token_type:
-            raise RuntimeError(f"Token {self.current_token.token_type} doesn't match {token_type}.")
+            raise RuntimeError("Token {} doesn't match {}.".format(self.current_token.token_type, token_type))
         else:
             self.position += 1
             return self.current_token 
