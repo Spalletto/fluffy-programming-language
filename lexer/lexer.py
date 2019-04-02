@@ -9,6 +9,10 @@ TOKENS = {
     '(': 'LPAREN',
     ')': 'RPAREN',
     '=': 'EQUAL',
+    '<': 'LT',
+    '>': 'GT',
+    'IF': 'IF',
+    'ELSE': 'ELSE',
     'EOF': 'EOF',
     'PRINT': 'PRINT',
 }
@@ -27,7 +31,7 @@ class Token:
 
 
 class Lexer:
-    OPERATORS = ('+', '-', '*', '/', '(', ')', '=')
+    OPERATORS = ('+', '-', '*', '/', '(', ')', '=', '<', '>')
     
     def __init__(self, text):
         self.text = text
@@ -64,6 +68,10 @@ class Lexer:
 
         self.add_token(TOKENS["NUMBER"], int(number_string))
 
+    def tokenize_operator(self):
+        self.add_token(TOKENS[self.current_char], self.current_char)
+        self.next_char()
+
     def tokenize_word(self):
         word_string = ""
         while self.current_char.isalnum():
@@ -72,6 +80,10 @@ class Lexer:
         
         if word_string == 'print':
             self.add_token(TOKENS["PRINT"], word_string)
+        elif word_string == 'if':
+            self.add_token(TOKENS["IF"], word_string)
+        elif word_string == 'else':
+            self.add_token(TOKENS["ELSE"], word_string)
         else:
             self.add_token(TOKENS["WORD"], word_string)
 

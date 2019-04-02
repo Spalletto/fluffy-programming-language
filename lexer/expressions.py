@@ -91,3 +91,32 @@ class BinaryExpression(Expression):
 
     def __repr__(self):
         return self.__str__()
+
+
+class ConditionalExpression(Expression):
+    def __init__(self, operator, value1, value2):
+        self.operator = operator
+        self.value1 = value1
+        self.value2 = value2
+        if type(value1) is int:
+            self.value1 = ValueExpression(value1)
+        if type(value2) is int:
+            self.value2 = ValueExpression(value2)
+
+    def evaluate(self):
+        if self.operator is '=':
+            return self.value1.evaluate() == self.value2.evaluate()
+        elif self.operator is '<':
+            return self.value1.evaluate() < self.value2.evaluate()
+        elif self.operator is '>':
+            return self.value1.evaluate() > self.value2.evaluate()
+        else:
+            raise TypeError("Unknown operator")
+
+    def __str__(self):
+        return "BinaryExp('{}', '{}', '{}')".format(
+            self.value1, self.operator, self.value2
+        )
+
+    def __repr__(self):
+        return self.__str__()

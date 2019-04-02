@@ -12,3 +12,10 @@ if __name__ == "__main__":
     for s in statements:
         s.execute()
         #print(s)
+
+# name = 2+2*10
+# name2 = 50/(8+2)
+# str = "HUY!"
+# print name
+# print "Hello World"
+# print name2

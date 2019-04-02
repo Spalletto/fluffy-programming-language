@@ -39,7 +39,26 @@ class Parser:
         raise RuntimeError("Error when assignment")
 
     def expression(self):
-        return self.additive()
+        return self.conditional()
+
+    def conditional(self):
+        result = self.additive()
+        while True:
+            if self.match(TOKENS['=']):
+                expression = ConditionalExpression('=', result, self.additive())
+                result = expression.evaluate()
+                continue
+            elif self.match(TOKENS['>']):
+                expression = ConditionalExpression('>', result, self.additive())
+                result = expression.evaluate()
+                continue
+            elif self.match(TOKENS['<']):
+                expression = ConditionalExpression('<', result, self.additive())
+                result = expression.evaluate()
+                continue
+            break
+
+        return result
 
     def additive(self):
         result = self.multiplicative()
