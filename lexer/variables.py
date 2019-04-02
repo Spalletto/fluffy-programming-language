@@ -8,6 +8,10 @@ class Variables:
         return self.VARIABLES.get(key, 0)
 
     def add(self, key, value):
-        self.VARIABLES[key] = value
+        type, name = key.split(' ')
+        self.VARIABLES[name] = {
+            'type': type,
+            'value': value
+        }
 
 variables = Variables()

@@ -31,10 +31,10 @@ class Parser:
         return self.assignment_statement()
 
     def assignment_statement(self):
-        variable_name = self.current_token.value
-        if self.match('WORD') and self.get(0).token_type == "EQUAL":
+        variable = self.current_token.value
+        if self.match('VAR') and self.get(0).token_type == "EQUAL":
             self.consume("EQUAL")
-            result = AssignStatement(variable_name, self.expression())
+            result = AssignStatement(variable, self.expression())
             result.execute()
             return result
         
@@ -115,7 +115,8 @@ class Parser:
     def primary(self):
         token = self.current_token
         if self.match('NUMBER'):
-            return ValueExpression(token.value)
+            result = ValueExpression(token.value)
+            return result.evaluate()
         elif self.match('WORD'):
             result = ConstantExpression(token.value)
             return result.evaluate()

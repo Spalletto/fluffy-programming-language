@@ -15,6 +15,9 @@ TOKENS = {
     'ELSE': 'ELSE',
     'EOF': 'EOF',
     'PRINT': 'PRINT',
+    'VAR': 'VAR',
+    'INT': 'INT',
+    'STR': 'STR',
 }
 
 
@@ -74,7 +77,7 @@ class Lexer:
 
     def tokenize_word(self):
         word_string = ""
-        while self.current_char.isalnum():
+        while self.current_char.isalnum() or word_string == 'str' or word_string == 'int':
             word_string += self.current_char
             self.next_char()
         
@@ -84,6 +87,8 @@ class Lexer:
             self.add_token(TOKENS["IF"], word_string)
         elif word_string == 'else':
             self.add_token(TOKENS["ELSE"], word_string)
+        elif word_string.startswith('int') or word_string.startswith('str'):
+            self.add_token(TOKENS['VAR'], word_string)
         else:
             self.add_token(TOKENS["WORD"], word_string)
 

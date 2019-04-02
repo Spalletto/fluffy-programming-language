@@ -32,7 +32,7 @@ class ConstantExpression(Expression):
         if result is None: 
             raise NameError("Constant doesn't exist")
         else: 
-            return result
+            return result['value']
 
     def __str__(self):
         return "WordExp({})".format(self.name)
