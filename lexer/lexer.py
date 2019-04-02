@@ -1,16 +1,18 @@
 TOKENS = {
-    'NUMBER' : 'NUMBER',
-    'WORD' : 'WORD',
-    '+' : 'PLUS', 
-    '-' : 'MINUS', 
-    '*' : 'MULTIPLY', 
-    '/' : 'DIVIDE',
-    '(' : 'LPAREN',
-    ')' : 'RPAREN',
-    '=' : 'EQUAL',
+    'NUMBER': 'NUMBER',
+    'WORD': 'WORD',
+    'TEXT': 'TEXT',
+    '+': 'PLUS',
+    '-': 'MINUS',
+    '*': 'MULTIPLY',
+    '/': 'DIVIDE',
+    '(': 'LPAREN',
+    ')': 'RPAREN',
+    '=': 'EQUAL',
     'EOF': 'EOF',
-    'PRINT' : 'PRINT', 
+    'PRINT': 'PRINT',
 }
+
 
 class Token:
     def __init__(self, token_type, value):
@@ -22,6 +24,7 @@ class Token:
     
     def __repr__(self):
         return self.__str__()
+
 
 class Lexer:
     OPERATORS = ('+', '-', '*', '/', '(', ')', '=')
@@ -42,6 +45,8 @@ class Lexer:
         while self.position < len(self.text):
             if self.current_char.isdigit():
                 self.tokenize_number()
+            elif self.current_char == '"':
+                self.tokenize_text()
             elif self.current_char.isalpha():
                 self.tokenize_word()
             elif self.current_char in self.OPERATORS:
@@ -70,7 +75,22 @@ class Lexer:
         else:
             self.add_token(TOKENS["WORD"], word_string)
 
-    def tokenize_operator(self):
+    def tokenize_text(self):
+        self.next_char()  # skip "
+        word_string = ""
+        while self.current_char != '"':
+            if self.current_char == "\\":
+                self.next_char()
+                if self.current_char == '"':
+                    word_string += '"'
+                elif self.current_char == 'n':
+                    word_string += '\n'
+                else:
+                    word_string += '\\'
+                    continue
+            word_string += self.current_char
+            self.next_char()
+
         self.add_token(TOKENS[self.current_char], self.current_char)
         self.next_char()
 

@@ -84,9 +84,12 @@ class Parser:
     def primary(self):
         token = self.current_token
         if self.match('NUMBER'):
-            return NumberExpression(token.value)
-        if self.match('WORD'):
+            return ValueExpression(token.value)
+        elif self.match('WORD'):
             result = ConstantExpression(token.value)
+            return result.evaluate()
+        elif self.match('TEXT'):
+            result = ValueExpression(token.value)
             return result.evaluate()
         elif self.match('LPAREN'):
             result = self.expression()
@@ -115,5 +118,3 @@ class Parser:
             return TOKENS['EOF']
         else:
             return self.tokens[position]
-
-        

@@ -1,7 +1,7 @@
 class Variables:
     VARIABLES = {}
 
-    def isExists(self, key):
+    def is_exists(self, key):
         return False if self.VARIABLES.get(key) is None else True
 
     def get(self, key):

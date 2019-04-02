@@ -6,18 +6,18 @@ class Expression:
         raise NotImplementedError
 
 
-class NumberExpression(Expression):
-    def __init__(self, number):
-        self.number = number
+class ValueExpression(Expression):
+    def __init__(self, value):
+        self.value = value
     
     def __int__(self):
-        return self.number
+        return self.value
     
     def evaluate(self):
-        return self.number
+        return self.value
 
     def __str__(self):
-        return "NumberExp({})".format(self.number)
+        return "ValueExpession({})".format(self.value)
 
     def __repr__(self):
         return self.__str__()
@@ -67,9 +67,9 @@ class BinaryExpression(Expression):
         self.value1 = value1
         self.value2 = value2
         if type(value1) is int:
-            self.value1 = NumberExpression(value1)
+            self.value1 = ValueExpression(value1)
         if type(value2) is int:
-            self.value2 = NumberExpression(value2)
+            self.value2 = ValueExpression(value2)
         
     def evaluate(self):
         if self.operator is '+':
