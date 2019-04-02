@@ -40,3 +40,25 @@ class PrintStatement(Statement):
         return "PrintStatement(Text: '{}')".format(
             self.expression.evaluate()
         )
+
+
+class IfStatement(Statement):
+    def __init__(self, expression, if_statement, else_statement):
+        self.expression = ValueExpression(expression)
+        self.if_statement = if_statement
+        self.else_statement = else_statement
+
+    def execute(self):
+        result = self.expression.evaluate()
+        if result != 0:
+            self.if_statement.execute()
+        elif self.else_statement is not None:
+            self.else_statement.execute()
+
+    def __str__(self):
+        result = "If('{}') {}".format(
+            self.expression, self.if_statement
+        )
+        if self.else_statement is not None:
+            result += "\nElse {}".format(self.else_statement)
+        return result

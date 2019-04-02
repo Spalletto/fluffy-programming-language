@@ -103,7 +103,7 @@ class Lexer:
             word_string += self.current_char
             self.next_char()
 
-        self.add_token(TOKENS[self.current_char], self.current_char)
+        self.add_token(TOKENS['TEXT'], word_string)
         self.next_char()
 
     def next_char(self):

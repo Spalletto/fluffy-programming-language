@@ -26,6 +26,8 @@ class Parser:
     def statement(self):
         if self.match('PRINT'):
             return PrintStatement(self.expression())
+        elif self.match('IF'):
+            return self.ifelse_statement()
         return self.assignment_statement()
 
     def assignment_statement(self):
@@ -37,6 +39,16 @@ class Parser:
             return result
         
         raise RuntimeError("Error when assignment")
+
+    def ifelse_statement(self):
+        condition = self.expression()
+        if_statement = self.statement()
+        if self.match(TOKENS['ELSE']):
+            else_statement = self.statement()
+        else:
+            else_statement = None
+
+        return IfStatement(condition, if_statement, else_statement)
 
     def expression(self):
         return self.conditional()

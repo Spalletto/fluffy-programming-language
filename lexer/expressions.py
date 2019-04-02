@@ -105,11 +105,11 @@ class ConditionalExpression(Expression):
 
     def evaluate(self):
         if self.operator is '=':
-            return self.value1.evaluate() == self.value2.evaluate()
+            return int(self.value1.evaluate() == self.value2.evaluate())
         elif self.operator is '<':
-            return self.value1.evaluate() < self.value2.evaluate()
+            return int(self.value1.evaluate() < self.value2.evaluate())
         elif self.operator is '>':
-            return self.value1.evaluate() > self.value2.evaluate()
+            return int(self.value1.evaluate() > self.value2.evaluate())
         else:
             raise TypeError("Unknown operator")
 
