@@ -8,10 +8,9 @@ if __name__ == "__main__":
     tokens = lexer.tokenize()
     print(tokens)
     parser = Parser(tokens)
-    statements = parser.parse()
-    for s in statements:
-        s.execute()
-        #print(s)
+    program = parser.parse()
+    program.execute()
+    
 
 # name = 2+2*10
 # name2 = 50/(8+2)

@@ -18,6 +18,8 @@ TOKENS = {
     'VAR': 'VAR',
     'INT': 'INT',
     'STR': 'STR',
+    '{': 'LBRACE',
+    '}': 'RBRACE',
 }
 
 
@@ -34,7 +36,7 @@ class Token:
 
 
 class Lexer:
-    OPERATORS = ('+', '-', '*', '/', '(', ')', '=', '<', '>')
+    OPERATORS = ('+', '-', '*', '/', '(', ')', '=', '<', '>', '{', '}')
     
     def __init__(self, text):
         self.text = text

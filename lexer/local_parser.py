@@ -16,12 +16,26 @@ class Parser:
             return Token('EOF', 'EOF')
 
     def parse(self):
-        result = []
+        result = BlockStatement()
 
         while not self.match(TOKENS['EOF']):
-            result.append(self.statement())
+            result.add(self.statement())
         
         return result
+    
+    def statement_or_block(self):
+        if self.match(TOKENS['{']):
+            return self.block()
+        else:
+            return self.statement()
+
+    def block(self):
+        block = BlockStatement()
+
+        while not self.match(TOKENS['}']):
+            block.add(self.statement())
+
+        return block
 
     def statement(self):
         if self.match('PRINT'):
@@ -42,9 +56,9 @@ class Parser:
 
     def ifelse_statement(self):
         condition = self.expression()
-        if_statement = self.statement()
+        if_statement = self.statement_or_block()
         if self.match(TOKENS['ELSE']):
-            else_statement = self.statement()
+            else_statement = self.statement_or_block()
         else:
             else_statement = None
 

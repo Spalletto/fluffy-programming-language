@@ -62,3 +62,20 @@ class IfStatement(Statement):
         if self.else_statement is not None:
             result += "\nElse {}".format(self.else_statement)
         return result
+
+
+class BlockStatement(Statement):
+    def __init__(self):
+        self.statements = []
+
+    def add(self, statement):
+        self.statements.append(statement)
+    
+    def execute(self):
+        for statement in self.statements:
+            statement.execute()
+
+    def __str__(self):
+        return "BlockStatement('{}')".format(
+            self.statements
+        )
