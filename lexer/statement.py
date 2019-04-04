@@ -10,8 +10,7 @@ class Statement:
 class AssignStatement(Statement):
     def __init__(self, variable, expression):
         self.variable = variable
-        if type(expression) is int or str:
-            self.expression = ValueExpression(expression)
+        self.expression = expression
         self.result = 0
     
     def execute(self):
@@ -30,8 +29,6 @@ class AssignStatement(Statement):
 class PrintStatement(Statement):
     def __init__(self, expression):
         self.expression = expression
-        if type(expression) is int or str:
-            self.expression = ValueExpression(expression)
 
     def execute(self):
         print(self.expression.evaluate())
@@ -44,7 +41,7 @@ class PrintStatement(Statement):
 
 class IfStatement(Statement):
     def __init__(self, expression, if_statement, else_statement):
-        self.expression = ValueExpression(expression)
+        self.expression = expression
         self.if_statement = if_statement
         self.else_statement = else_statement
 
@@ -78,4 +75,19 @@ class BlockStatement(Statement):
     def __str__(self):
         return "BlockStatement('{}')".format(
             self.statements
+        )
+
+
+class WhileStatement(Statement):
+    def __init__(self, condition, statement):
+        self.condition = condition
+        self.statement = statement
+
+    def execute(self):
+        while self.condition.evaluate() != 0:
+            self.statement.execute()
+
+    def __str__(self):
+        return "WhileStatement('{}' : {})".format(
+            self.condition, self.statement
         )

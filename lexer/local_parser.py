@@ -42,11 +42,13 @@ class Parser:
             return PrintStatement(self.expression())
         elif self.match('IF'):
             return self.ifelse_statement()
+        elif self.match('WHILE'):
+            return self.while_statement()
         return self.assignment_statement()
 
     def assignment_statement(self):
         variable = self.current_token.value
-        if self.match('VAR') and self.get(0).token_type == "EQUAL":
+        if (self.match('VAR') or self.match('WORD')) and self.get(0).token_type == "EQUAL":
             self.consume("EQUAL")
             result = AssignStatement(variable, self.expression())
             result.execute()
@@ -64,6 +66,11 @@ class Parser:
 
         return IfStatement(condition, if_statement, else_statement)
 
+    def while_statement(self):
+        condition = self.expression()
+        statement = self.statement_or_block()
+        return WhileStatement(condition, statement)
+
     def expression(self):
         return self.conditional()
 
@@ -71,16 +78,13 @@ class Parser:
         result = self.additive()
         while True:
             if self.match(TOKENS['=']):
-                expression = ConditionalExpression('=', result, self.additive())
-                result = expression.evaluate()
+                result = ConditionalExpression('=', result, self.additive())
                 continue
             elif self.match(TOKENS['>']):
-                expression = ConditionalExpression('>', result, self.additive())
-                result = expression.evaluate()
+                result = ConditionalExpression('>', result, self.additive())
                 continue
             elif self.match(TOKENS['<']):
-                expression = ConditionalExpression('<', result, self.additive())
-                result = expression.evaluate()
+                result = ConditionalExpression('<', result, self.additive())
                 continue
             break
 
@@ -90,12 +94,10 @@ class Parser:
         result = self.multiplicative()
         while True:
             if self.match(TOKENS['+']):
-                expression = BinaryExpression('+', result, self.multiplicative())
-                result = expression.evaluate()
+                result = BinaryExpression('+', result, self.multiplicative())
                 continue
             elif self.match(TOKENS['-']):
-                expression = BinaryExpression('-', result, self.multiplicative())
-                result = expression.evaluate()
+                result = BinaryExpression('-', result, self.multiplicative())
                 continue
             break
             
@@ -105,12 +107,10 @@ class Parser:
         result = self.unary()
         while True:
             if self.match(TOKENS['*']):
-                expression = BinaryExpression('*', result, self.unary())
-                result = expression.evaluate()
+                result = BinaryExpression('*', result, self.unary())
                 continue
             elif self.match(TOKENS['/']):
-                expression = BinaryExpression('/', result, self.unary())
-                result = expression.evaluate()
+                result = BinaryExpression('/', result, self.unary())
                 continue
             break
             
@@ -118,25 +118,20 @@ class Parser:
 
     def unary(self):
         if self.match(TOKENS['-']):
-            expression = UnaryExpression('-', self.primary())
-            return expression.evaluate()
+            return UnaryExpression('-', self.primary())
         elif self.match(TOKENS['+']):
-            expression = UnaryExpression('+', self.primary())
-            return expression.evaluate()
+            return self.primary()
 
         return self.primary()
     
     def primary(self):
         token = self.current_token
         if self.match('NUMBER'):
-            result = ValueExpression(token.value)
-            return result.evaluate()
+            return ValueExpression(token.value)
         elif self.match('WORD'):
-            result = ConstantExpression(token.value)
-            return result.evaluate()
+            return ConstantExpression(token.value)
         elif self.match('TEXT'):
-            result = ValueExpression(token.value)
-            return result.evaluate()
+            return ValueExpression(token.value)
         elif self.match('LPAREN'):
             result = self.expression()
             self.match('RPAREN')

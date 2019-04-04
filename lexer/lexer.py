@@ -13,6 +13,8 @@ TOKENS = {
     '>': 'GT',
     'IF': 'IF',
     'ELSE': 'ELSE',
+    'WHILE': 'WHILE',
+    'FOR': 'FOR',
     'EOF': 'EOF',
     'PRINT': 'PRINT',
     'VAR': 'VAR',
@@ -22,6 +24,7 @@ TOKENS = {
     '}': 'RBRACE',
 }
 
+from re import sub
 
 class Token:
     def __init__(self, token_type, value):
@@ -39,7 +42,7 @@ class Lexer:
     OPERATORS = ('+', '-', '*', '/', '(', ')', '=', '<', '>', '{', '}')
     
     def __init__(self, text):
-        self.text = text
+        self.text = sub('\/\*[\s\S]+\*\/', '', text)
         self.position = 0
         self.tokens = []
 
@@ -82,13 +85,17 @@ class Lexer:
         while self.current_char.isalnum() or word_string == 'str' or word_string == 'int':
             word_string += self.current_char
             self.next_char()
-        
+
         if word_string == 'print':
             self.add_token(TOKENS["PRINT"], word_string)
         elif word_string == 'if':
             self.add_token(TOKENS["IF"], word_string)
         elif word_string == 'else':
             self.add_token(TOKENS["ELSE"], word_string)
+        elif word_string == 'while':
+            self.add_token(TOKENS["WHILE"], word_string)
+        elif word_string == 'for':
+            self.add_token(TOKENS["for"], word_string)
         elif word_string.startswith('int') or word_string.startswith('str'):
             self.add_token(TOKENS['VAR'], word_string)
         else:
