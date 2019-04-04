@@ -1,3 +1,6 @@
+from re import sub
+
+
 TOKENS = {
     'NUMBER': 'NUMBER',
     'WORD': 'WORD',
@@ -17,15 +20,13 @@ TOKENS = {
     'FOR': 'FOR',
     'EOF': 'EOF',
     'PRINT': 'PRINT',
-    'VAR': 'VAR',
-    'INT': 'INT',
-    'STR': 'STR',
+    'VARIABLE': 'VARIABLE',
     '{': 'LBRACE',
     '}': 'RBRACE',
     ',': 'COMMA',
 }
 
-from re import sub
+VAR_TYPES = ('int', 'str', 'figure')
 
 class Token:
     def __init__(self, token_type, value):
@@ -83,7 +84,7 @@ class Lexer:
 
     def tokenize_word(self):
         word_string = ""
-        while self.current_char.isalnum() or word_string == 'str' or word_string == 'int':
+        while self.current_char.isalnum() or self.current_char == '_' or word_string in VAR_TYPES:
             word_string += self.current_char
             self.next_char()
 
@@ -97,8 +98,9 @@ class Lexer:
             self.add_token(TOKENS["WHILE"], word_string)
         elif word_string == 'for':
             self.add_token(TOKENS["FOR"], word_string)
-        elif word_string.startswith('int') or word_string.startswith('str'):
-            self.add_token(TOKENS['VAR'], word_string)
+        elif word_string.startswith('int') or word_string.startswith('str') or \
+        word_string.startswith('figure'):
+            self.add_token(TOKENS['VARIABLE'], word_string)
         else:
             self.add_token(TOKENS["WORD"], word_string)
 

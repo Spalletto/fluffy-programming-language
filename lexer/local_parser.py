@@ -50,7 +50,7 @@ class Parser:
 
     def assignment_statement(self):
         variable = self.current_token.value
-        if (self.match('VAR') or self.match('WORD')) and self.get(0).token_type == "EQUAL":
+        if (self.match('VARIABLE') or self.match('WORD')) and self.get(0).token_type == "EQUAL":
             self.consume("EQUAL")
             result = AssignStatement(variable, self.expression())
             result.execute()
