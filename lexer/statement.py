@@ -91,3 +91,22 @@ class WhileStatement(Statement):
         return "WhileStatement('{}' : {})".format(
             self.condition, self.statement
         )
+
+
+class ForStatement(Statement):
+    def __init__(self, initialization, termination, increment, statement):
+        self.initialization = initialization
+        self.termination = termination
+        self.increment = increment
+        self.statement = statement
+
+    def execute(self):
+        self.initialization.execute()
+        while self.termination.evaluate() != 0:
+            self.statement.execute()
+            self.increment.execute()
+
+    def __str__(self):
+        return "ForStatement({}, {}, {} : {})".format(
+            self.initialization, self.termination, self.increment, self.statement
+        )

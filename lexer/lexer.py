@@ -22,6 +22,7 @@ TOKENS = {
     'STR': 'STR',
     '{': 'LBRACE',
     '}': 'RBRACE',
+    ',': 'COMMA',
 }
 
 from re import sub
@@ -39,7 +40,7 @@ class Token:
 
 
 class Lexer:
-    OPERATORS = ('+', '-', '*', '/', '(', ')', '=', '<', '>', '{', '}')
+    OPERATORS = ('+', '-', '*', '/', '(', ')', '=', '<', '>', '{', '}', ',')
     
     def __init__(self, text):
         self.text = sub('\/\*[\s\S]+\*\/', '', text)
@@ -95,7 +96,7 @@ class Lexer:
         elif word_string == 'while':
             self.add_token(TOKENS["WHILE"], word_string)
         elif word_string == 'for':
-            self.add_token(TOKENS["for"], word_string)
+            self.add_token(TOKENS["FOR"], word_string)
         elif word_string.startswith('int') or word_string.startswith('str'):
             self.add_token(TOKENS['VAR'], word_string)
         else:

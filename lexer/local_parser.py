@@ -44,6 +44,8 @@ class Parser:
             return self.ifelse_statement()
         elif self.match('WHILE'):
             return self.while_statement()
+        elif self.match('FOR'):
+            return self.for_statement()
         return self.assignment_statement()
 
     def assignment_statement(self):
@@ -70,6 +72,15 @@ class Parser:
         condition = self.expression()
         statement = self.statement_or_block()
         return WhileStatement(condition, statement)
+
+    def for_statement(self):
+        initialization = self.assignment_statement()
+        self.consume(TOKENS[','])
+        termination = self.expression()
+        self.consume(TOKENS[','])
+        increment = self.assignment_statement()
+        statement = self.statement_or_block()
+        return ForStatement(initialization, termination, increment, statement)
 
     def expression(self):
         return self.conditional()
