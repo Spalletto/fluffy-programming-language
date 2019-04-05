@@ -1,6 +1,10 @@
 from variables import *
 from expressions import *
-
+from matplotlib import pyplot
+from shapely.geometry import Point, Polygon
+from descartes import PolygonPatch
+from re import findall
+from ast import literal_eval
 
 class Statement:
     def execute(self):
@@ -36,6 +40,37 @@ class PrintStatement(Statement):
     def __str__(self):
         return "PrintStatement(Text: '{}')".format(
             self.expression.evaluate()
+        )
+
+
+class DrawStatement(Statement):
+    fig = pyplot.figure(1)
+    ax = fig.add_subplot(111)
+
+    def __init__(self, variable, color):
+        self.variable = variable
+        self.color = color
+
+    def execute(self):
+        variable = self.variable.evaluate()
+
+        if variable.startswith('Circle'):
+            values = findall('[0-9]+', variable)
+            values = list(map(int, values))
+            x, y, r = values
+            figure = Point(x, y).buffer(r)
+
+        elif variable.startswith('Polygon'):
+            variable = variable.replace('Polygon', '')
+            points = literal_eval(variable)
+            figure = Polygon(points)
+            
+        patch = PolygonPatch(figure, fc=self.color)
+        self.ax.add_patch(patch)
+
+    def __str__(self):
+        return "DrawStatement(Text: '{}')".format(
+            self.variable.evaluate()
         )
 
 

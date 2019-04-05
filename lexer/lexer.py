@@ -37,7 +37,8 @@ var a = {
 """
 
 VAR_TYPES = {'int', 'str', 'figure'}
-FUNCTIONS = {'draw', 'circle', 'polygon'}
+VAR_SUBTYPES = {'circle', 'polygon'}
+FUNCTIONS = {'draw', }
 
 class Token:
     def __init__(self, _type, value):

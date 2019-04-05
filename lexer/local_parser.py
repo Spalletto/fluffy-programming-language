@@ -40,6 +40,8 @@ class Parser:
     def statement(self):
         if self.match('PRINT'):
             return PrintStatement(self.expression())
+        if self.current_token.value == 'draw':
+            return DrawStatement(*self.draw_statement())
         elif self.match('IF'):
             return self.ifelse_statement()
         elif self.match('WHILE'):
@@ -47,12 +49,23 @@ class Parser:
         elif self.match('FOR'):
             return self.for_statement()
         return self.assignment_statement()
+    
+    def draw_statement(self):
+        self.consume('WORD')
+        self.consume('LPAREN')
+        _object = self.primary()
+        self.consume('COMMA')
+        color = self.current_token.value
+        print(_object, color)
+        self.consume('TEXT')
+        self.consume('RPAREN')
+        return (_object, color)
 
     def assignment_statement(self):
         variable = self.current_token.value
         if (self.match('VARIABLE') or self.match('WORD')) and self.get(0).type == "EQUAL":
             self.consume('EQUAL')
-            if self.current_token.type is TOKENS['WORD'] and self.current_token.value in FUNCTIONS:
+            if self.current_token.type is TOKENS['WORD'] and self.current_token.value in VAR_SUBTYPES:
                 _object = self.object_statement()
                 result = AssignStatement(variable, _object)
             else:
