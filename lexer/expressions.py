@@ -120,14 +120,25 @@ class CircleObject(Expression):
         self.radius = radius
 
     def evaluate(self):
-        return {
-            'x': self.center.x.evaluate(),
-            'y': self.center.y.evaluate(),
-            'r': self.radius.evaluate(),
-            }
+        return f"Circle(({self.center.x.evaluate()}, {self.center.y.evaluate()}), r={self.radius.evaluate()})"
 
     def __str__(self):
-        return f"Circle(({self.center.x}, {self.center.y}) - {self.radius})"
+        return self.evaluate()
+
+
+class PolygonObject(Expression):
+    def __init__(self, points):
+        self.points = points
+
+    def evaluate(self):
+        evaluated_points = []
+        for point in self.points:
+            evaluated_points.append(point.evaluate())
+        evaluated_points = tuple(map(str, evaluated_points))
+        return "Polygon(" + ', '.join(evaluated_points) + ')'
+
+    def __str__(self):
+        return self.evaluate()
 
 
 class PointObject(Expression):
@@ -136,8 +147,7 @@ class PointObject(Expression):
         self.y = y
 
     def evaluate(self):
-        self.x.evaluate()
-        self.y.evaluate()
+        return (self.x.evaluate(), self.y.evaluate())
 
     def __str__(self):
         return f"Point({self.x}; {self.y})"

@@ -16,7 +16,6 @@ class AssignStatement(Statement):
     def execute(self):
         self.result = self.expression.evaluate()
         variables.add(self.variable, self.result)
-        self.print_vars()
 
     def __str__(self):
         return "AssignStatement({}: {})".format(

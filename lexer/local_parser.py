@@ -70,8 +70,15 @@ class Parser:
             self.consume('COMMA')
             r = self.expression()
             self.consume('RPAREN')
-            print(point, r)
             return CircleObject(point, r)
+        elif function.value == 'polygon':
+            points = []
+            self.consume('LPAREN')
+            while not self.match('RPAREN'):
+                points.append(self.point_statement())
+                if self.current_token.type == 'COMMA':
+                    self.consume('COMMA')
+            return PolygonObject(points)
 
     def point_statement(self):
         self.consume('LBRACKET')
