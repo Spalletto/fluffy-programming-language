@@ -29,13 +29,6 @@ TOKENS = {
     ',': 'COMMA',
 }
 
-"""
-var a = {
-    'A': ['a', 'b', 'c'],
-    'B': ['d', 'e', 'c'],
-}
-"""
-
 VAR_TYPES = {'int', 'str', 'figure'}
 VAR_SUBTYPES = {'circle', 'polygon'}
 FUNCTIONS = {'draw', }
@@ -56,7 +49,7 @@ class Lexer:
     OPERATORS = {'+', '-', '*', '/', '(', ')', '=', '<', '>', '{', '}', '[', ']', ','}
     
     def __init__(self, text):
-        self.text = sub('\/\*[\s\S]+\*\/', '', text)
+        self.text = sub(r'\/\*[\s\S]+\*\/', '', text)
         self.position = 0
         self.tokens = []
 
