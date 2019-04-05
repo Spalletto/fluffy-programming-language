@@ -5,6 +5,7 @@ TOKENS = {
     'NUMBER': 'NUMBER',
     'WORD': 'WORD',
     'TEXT': 'TEXT',
+    'POINT': 'POINT',
     '+': 'PLUS',
     '-': 'MINUS',
     '*': 'MULTIPLY',
@@ -23,25 +24,35 @@ TOKENS = {
     'VARIABLE': 'VARIABLE',
     '{': 'LBRACE',
     '}': 'RBRACE',
+    '[': 'LBRACKET',
+    ']': 'RBRACKET',
     ',': 'COMMA',
 }
 
-VAR_TYPES = ('int', 'str', 'figure')
+"""
+var a = {
+    'A': ['a', 'b', 'c'],
+    'B': ['d', 'e', 'c'],
+}
+"""
+
+VAR_TYPES = {'int', 'str', 'figure'}
+FUNCTIONS = {'draw', 'circle', 'polygon'}
 
 class Token:
-    def __init__(self, token_type, value):
-        self.token_type = token_type
+    def __init__(self, _type, value):
+        self.type = _type
         self.value = value
     
     def __str__(self):
-        return "TOKEN({}, {})".format(self.token_type, self.value)
+        return "TOKEN({}, {})".format(self.type, self.value)
     
     def __repr__(self):
         return self.__str__()
 
 
 class Lexer:
-    OPERATORS = ('+', '-', '*', '/', '(', ')', '=', '<', '>', '{', '}', ',')
+    OPERATORS = {'+', '-', '*', '/', '(', ')', '=', '<', '>', '{', '}', '[', ']', ','}
     
     def __init__(self, text):
         self.text = sub('\/\*[\s\S]+\*\/', '', text)
@@ -71,12 +82,15 @@ class Lexer:
         return self.tokens
                  
     def tokenize_number(self):
+        self.add_token(TOKENS["NUMBER"], self.parse_number())
+
+    def parse_number(self):
         number_string = ""
         while self.current_char.isdigit():
             number_string += self.current_char
             self.next_char()
 
-        self.add_token(TOKENS["NUMBER"], int(number_string))
+        return int(number_string)
 
     def tokenize_operator(self):
         self.add_token(TOKENS[self.current_char], self.current_char)

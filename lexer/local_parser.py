@@ -50,13 +50,38 @@ class Parser:
 
     def assignment_statement(self):
         variable = self.current_token.value
-        if (self.match('VARIABLE') or self.match('WORD')) and self.get(0).token_type == "EQUAL":
-            self.consume("EQUAL")
-            result = AssignStatement(variable, self.expression())
-            result.execute()
+        if (self.match('VARIABLE') or self.match('WORD')) and self.get(0).type == "EQUAL":
+            self.consume('EQUAL')
+            if self.current_token.type is TOKENS['WORD'] and self.current_token.value in FUNCTIONS:
+                _object = self.object_statement()
+                result = AssignStatement(variable, _object)
+            else:
+                result = AssignStatement(variable, self.expression())
             return result
         
         raise RuntimeError("Error when assignment")
+
+    def object_statement(self):
+        function = self.current_token
+        self.consume('WORD')
+        if function.value == 'circle':
+            if self.consume('LPAREN').value == '[':
+                point = self.point_statement()
+            self.consume('COMMA')
+            r = self.expression()
+            self.consume('RPAREN')
+            print(point, r)
+            return CircleObject(point, r)
+
+    def point_statement(self):
+        self.consume('LBRACKET')
+        while not self.match('COMMA'):
+            x = self.expression()
+
+        while not self.match('RBRACKET'):
+            y = self.expression()
+        
+        return PointObject(x, y)
 
     def ifelse_statement(self):
         condition = self.expression()
@@ -151,14 +176,14 @@ class Parser:
             raise RuntimeError("Unknown Expression")
 
     def consume(self, token_type):
-        if self.current_token.token_type != token_type:
-            raise RuntimeError("Token {} doesn't match {}.".format(self.current_token.token_type, token_type))
+        if self.current_token.type != token_type:
+            raise RuntimeError("Token {} doesn't match {}.".format(self.current_token.type, token_type))
         else:
             self.position += 1
             return self.current_token 
 
     def match(self, token_type):
-        if self.current_token.token_type != token_type:
+        if self.current_token.type != token_type:
             return False
         else:
             self.position += 1
