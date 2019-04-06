@@ -1,10 +1,13 @@
-from matplotlib import pyplot
-from variables import *
-from expressions import *
-from shapely.geometry import Point, Polygon
-from descartes import PolygonPatch
-from re import findall
 from ast import literal_eval
+from re import findall
+
+from descartes import PolygonPatch
+from shapely.geometry import Point, Polygon
+
+from expressions import *
+from lexer import PATCHES
+from variables import *
+
 
 class Statement:
     def execute(self):
@@ -44,9 +47,6 @@ class PrintStatement(Statement):
 
 
 class DrawStatement(Statement):
-    fig = pyplot.figure(1)
-    ax = fig.add_subplot(111)
-
     def __init__(self, variable, color):
         self.variable = variable
         self.color = color
@@ -81,9 +81,7 @@ class DrawStatement(Statement):
         
         variables.add_object(str_variable, figure)
         patch = PolygonPatch(figure, fc=self.color)
-        self.ax.add_patch(patch)
-        pyplot.xlim(-2.5, 2.5)
-        pyplot.ylim(-2.5, 2.5)
+        PATCHES.append(patch)
 
     def __str__(self):
         return "DrawStatement(Text: '{}')".format(

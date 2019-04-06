@@ -1,0 +1,48 @@
+figure new_circle = circle([1, 1], 1)
+figure new_circle1 = circle([0, 0], 1)
+draw(new_circle, "red")
+draw(new_circle1, "black")
+/* 
+print new_circle1
+figure new_polygon = polygon([0, 0], [0, 1], [1, 1], [1, 0]) 
+print new_polygon
+draw(new_polygon, "white") 
+
+figure a = intersection(new_circle, new_circle1)
+draw(a, "gray")
+figure b = union(new_circle, new_circle1)
+draw(b, "yellow")
+figure c = difference(new_circle, new_circle1)
+draw(c, "blue")
+figure d = symmetric_difference(new_circle, new_circle1)
+draw(d, "green")
+/*
+
+*/
+
+
+
+figure new_circle = circle([1, 1], 1)
+figure new_circle1 = circle([0, 0], 1)
+draw(new_circle, "red")
+draw(new_circle1, "black")
+
+
+figure new_polygon = polygon([0, 0], [0, 1], [1, 1], [1, 0]) 
+
+draw(new_polygon, "blue") 
+
+figure a = intersection(new_circle, new_polygon)
+draw(a, "gray")
+/* 
+figure b = union(new_circle, new_circle1)
+draw(b, "yellow")
+figure c = difference(new_circle, new_circle1)
+draw(c, "blue")
+figure d = symmetric_difference(new_circle, new_circle1)
+draw(d, "green")
+/*
+
+*/
+
+    
