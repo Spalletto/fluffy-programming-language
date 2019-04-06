@@ -30,7 +30,7 @@ class ConstantExpression(Expression):
     def evaluate(self):
         result = variables.VARIABLES.get(self.name)
         if result is None: 
-            raise NameError(f"Constant '{self.name}' doesn't exist")
+            raise NameError("Constant '{}' doesn't exist".format(self.name))
         else: 
             return result['value']
 
@@ -120,7 +120,7 @@ class CircleObject(Expression):
         self.radius = radius
 
     def evaluate(self):
-        return f"Circle(({self.center.x.evaluate()}, {self.center.y.evaluate()}), r={self.radius.evaluate()})"
+        return "Circle(({}, {}), r={})".format(self.center.x.evaluate(), self.center.y.evaluate(), self.radius.evaluate())
 
     def __str__(self):
         return self.evaluate()
@@ -150,4 +150,17 @@ class PointObject(Expression):
         return (self.x.evaluate(), self.y.evaluate())
 
     def __str__(self):
-        return f"Point({self.x}; {self.y})"
+        return "Point({}; {})".format(self.x, self.y)
+
+
+class DrawObject(Expression):
+    def __init__(self, function, obj1, obj2):
+        self.function = function
+        self.obj1 = obj1
+        self.obj2 = obj2
+
+    def evaluate(self):
+        return "DrawObject({}, {}, {})".format(self.function, self.obj1, self.obj2)
+
+    def __str__(self):
+        return self.evaluate()

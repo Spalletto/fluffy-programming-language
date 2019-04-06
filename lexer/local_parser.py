@@ -56,7 +56,6 @@ class Parser:
         _object = self.primary()
         self.consume('COMMA')
         color = self.current_token.value
-        print(_object, color)
         self.consume('TEXT')
         self.consume('RPAREN')
         return (_object, color)
@@ -92,6 +91,13 @@ class Parser:
                 if self.current_token.type == 'COMMA':
                     self.consume('COMMA')
             return PolygonObject(points)
+        elif function.value in DRAW_FUCNTIONS: 
+            object1 = self.consume('LPAREN').value
+            self.consume('WORD')
+            object2 = self.consume('COMMA').value
+            self.consume('WORD')
+            self.consume('RPAREN')
+            return DrawObject(function.value, object1, object2) 
 
     def point_statement(self):
         self.consume('LBRACKET')

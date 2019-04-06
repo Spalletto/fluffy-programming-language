@@ -1,6 +1,7 @@
 from re import findall
 class Variables:
     VARIABLES = {}
+    OBJECTS = {}
 
     def is_exists(self, key):
         return False if self.VARIABLES.get(key) is None else True
@@ -17,5 +18,11 @@ class Variables:
                 'type': type,
                 'value': value
             }
+    
+    def add_object(self, key, value):
+        self.OBJECTS[key] = value
+
+    def get_object(self, key):
+        return self.OBJECTS[key]
 
 variables = Variables()

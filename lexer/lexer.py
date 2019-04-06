@@ -30,8 +30,10 @@ TOKENS = {
 }
 
 VAR_TYPES = {'int', 'str', 'figure'}
-VAR_SUBTYPES = {'circle', 'polygon'}
-FUNCTIONS = {'draw', }
+DRAW_FUCNTIONS = {'intersection', 'difference', 'symmetric_difference', 'union'}
+VAR_SUBTYPES = {'circle', 'polygon'} | DRAW_FUCNTIONS
+FUNCTIONS = {'draw'}
+
 
 class Token:
     def __init__(self, _type, value):
@@ -49,7 +51,7 @@ class Lexer:
     OPERATORS = {'+', '-', '*', '/', '(', ')', '=', '<', '>', '{', '}', '[', ']', ','}
     
     def __init__(self, text):
-        self.text = sub(r'\/\*[\s\S]+\*\/', '', text)
+        self.text = sub(r'\/\*[\sU\S]*?\*\/', '', text)
         self.position = 0
         self.tokens = []
 
@@ -106,7 +108,7 @@ class Lexer:
             self.add_token(TOKENS["WHILE"], word_string)
         elif word_string == 'for':
             self.add_token(TOKENS["FOR"], word_string)
-        elif word_string.startswith('int') or word_string.startswith('str') or \
+        elif word_string.startswith('int ') or word_string.startswith('str') or \
         word_string.startswith('figure'):
             self.add_token(TOKENS['VARIABLE'], word_string)
         else:
