@@ -32,7 +32,7 @@ TOKENS = {
 VAR_TYPES = {'int', 'str', 'figure'}
 DRAW_FUCNTIONS = {'intersection', 'difference', 'symmetric_difference', 'union'}
 VAR_SUBTYPES = {'circle', 'polygon'} | DRAW_FUCNTIONS
-FUNCTIONS = {'draw'}
+FUNCTIONS = {'draw', 'clear'}
 PATCHES = []
 
 

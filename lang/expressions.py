@@ -50,7 +50,7 @@ class UnaryExpression(Expression):
         if self.operator is '+':
             return self.value1
         elif self.operator is '-':
-            return -self.value1
+            return -self.value1.evaluate()
     
     def __str__(self):
         return "UnaryExp('{}', '{}')".format(

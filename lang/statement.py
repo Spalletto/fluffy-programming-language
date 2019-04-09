@@ -3,11 +3,11 @@ from re import findall
 
 from descartes import PolygonPatch
 from shapely.geometry import Point, Polygon
-
 from expressions import *
 from lexer import PATCHES
 from variables import *
 
+import matplotlib.pyplot as plt
 
 class Statement:
     def execute(self):
@@ -87,6 +87,17 @@ class DrawStatement(Statement):
         return "DrawStatement(Text: '{}')".format(
             self.variable.evaluate()
         )
+
+
+class ClearStatement(Statement):
+    def execute(self):
+        plt.cla()
+        PATCHES.clear()
+        plt.xlim(-2.5, 2.5)
+        plt.ylim(-2.5, 2.5)
+
+    def __str__(self):
+        return "ClearStatement()"
 
 
 class IfStatement(Statement):

@@ -40,8 +40,11 @@ class Parser:
     def statement(self):
         if self.match('PRINT'):
             return PrintStatement(self.expression())
-        if self.current_token.value == 'draw':
+        elif self.current_token.value == 'draw':
             return DrawStatement(*self.draw_statement())
+        elif self.current_token.value == 'clear':
+            self.clear_statement()
+            return ClearStatement()
         elif self.match('IF'):
             return self.ifelse_statement()
         elif self.match('WHILE'):
@@ -49,6 +52,11 @@ class Parser:
         elif self.match('FOR'):
             return self.for_statement()
         return self.assignment_statement()
+
+    def clear_statement(self):
+        self.consume('WORD')
+        self.consume('LPAREN')
+        self.consume('RPAREN')
     
     def draw_statement(self):
         self.consume('WORD')

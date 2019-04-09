@@ -45,4 +45,38 @@ draw(d, "green")
 
 */
 
-    
+***************************************
+for int i=0, i<20, i=i+1{
+    figure a = circle([i,i], 1)
+    draw(a, "cyan")
+}
+****************************************
+figure a = circle([0, 0], 3)
+figure b = polygon([1, 1], [-1, -1], [0, 0])
+
+draw(a, "yellow")
+draw(b, "blue") 
+
+******************************************************
+figure a = circle([0, 0], 3)
+figure b = polygon([0, 0], [5, 0], [5, 5])
+figure c = polygon([0, 0], [-5, 0], [-5, 5])
+figure u1 = union(a, b)
+figure u2 = union(ui, c)
+draw(a, "yellow")
+draw(b, "blue") 
+draw(c, "blue")
+
+figure a1 = circle([0, 0], 3)
+figure b1 = polygon([0, 0], [5, 0], [5, 5])
+
+figure u2 = symmetric_difference(a1, b1)
+draw(u2, "cyan")    
+
+***********************
+
+figure a = circle([0, 0], 3)
+figure b = polygon([0, 0], [0, 5], [-5, 0])
+figure c = symmetric_difference(a, b)
+
+draw(c, "orange")

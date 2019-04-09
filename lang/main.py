@@ -27,6 +27,8 @@ class Window(QDialog):
         self.button = QPushButton('RUN')
         self.button.clicked.connect(self.plot)
         self.initUI()
+        self.ax = self.figure.add_subplot(111)
+        self.i = 0
 
     def initUI(self):
         self.setWindowTitle("Fluffy.Graphics")
@@ -48,13 +50,12 @@ class Window(QDialog):
         main_layout.addLayout(layout2)
         self.setLayout(main_layout)
 
-        plt.xlim(-2.5, 2.5)
-        plt.ylim(-2.5, 2.5)
 
     def plot(self):
-       
-        ax = self.figure.add_subplot(111)
-
+        self.ax.cla()
+        PATCHES.clear()
+        plt.xlim(-2.5, 2.5)
+        plt.ylim(-2.5, 2.5)
         input_text = self.text_edit.toPlainText()
         
         lexer = Lexer(input_text)
@@ -64,14 +65,12 @@ class Window(QDialog):
         program.execute()
 
         for patch in PATCHES:
-            ax.add_patch(patch)
+            self.ax.add_patch(patch)
         # refresh canvas
         self.canvas.draw()
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-
     main = Window()
     main.show()
-
     sys.exit(app.exec_())
