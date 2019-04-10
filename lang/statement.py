@@ -55,6 +55,9 @@ class DrawStatement(Statement):
         variable = self.variable.evaluate()
         str_variable = str(self.variable).replace("WordExp(", '').replace(')', '')
 
+        if type(variable) is not str:
+            raise TypeError(f"Wrong type for draw function. Figure expected, got '{type(variable)}'")
+
         if variable.startswith('Circle'):
             values = findall('[0-9]+', variable)
             values = list(map(int, values))
@@ -69,7 +72,7 @@ class DrawStatement(Statement):
             function, obj1, obj2 = objects.split(',')
             obj1 = variables.get_object(obj1.strip())
             obj2 = variables.get_object(obj2.strip())
-
+            
             if function == 'intersection':
                 figure = obj1.intersection(obj2)
             if function == 'union':
@@ -78,6 +81,8 @@ class DrawStatement(Statement):
                 figure = obj1.difference(obj2)
             if function == 'symmetric_difference':
                 figure = obj1.symmetric_difference(obj2)
+        else:
+            raise TypeError(f"Wrong type for draw function. Figure expected, got '{type(variable)}'")
         
         variables.add_object(str_variable, figure)
         patch = PolygonPatch(figure, fc=self.color)

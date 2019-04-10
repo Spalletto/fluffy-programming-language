@@ -30,7 +30,7 @@ class ConstantExpression(Expression):
     def evaluate(self):
         result = variables.VARIABLES.get(self.name)
         if result is None: 
-            raise NameError("Constant '{}' doesn't exist".format(self.name))
+            raise NameError("Variable '{}' doesn't exist".format(self.name))
         else: 
             return result['value']
 
@@ -160,7 +160,7 @@ class DrawObject(Expression):
         self.obj2 = obj2
 
     def evaluate(self):
-        return "DrawObject({}, {}, {})".format(self.function, self.obj1, self.obj2)
+        return "DrawObject({}, {}, {})".format(self.function, self.obj1.evaluate(), self.obj1.evaluate())
 
     def __str__(self):
         return self.evaluate()

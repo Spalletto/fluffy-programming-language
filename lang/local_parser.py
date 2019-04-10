@@ -105,7 +105,7 @@ class Parser:
             object2 = self.consume('COMMA').value
             self.consume('WORD')
             self.consume('RPAREN')
-            return DrawObject(function.value, object1, object2) 
+            return DrawObject(function.value, ConstantExpression(object1), ConstantExpression(object2)) 
 
     def point_statement(self):
         self.consume('LBRACKET')
@@ -211,7 +211,7 @@ class Parser:
 
     def consume(self, token_type):
         if self.current_token.type != token_type:
-            raise RuntimeError("Token {} doesn't match {}.".format(self.current_token.type, token_type))
+            raise TypeError("Inappropriate type: Got {}, but {} expected.".format(self.current_token.type, token_type))
         else:
             self.position += 1
             return self.current_token 
