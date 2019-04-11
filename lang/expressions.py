@@ -1,5 +1,4 @@
-from variables import *
-from descartes import PolygonPatch
+from variables import variables
 from shapely.geometry import Point, Polygon
 from ast import literal_eval
 

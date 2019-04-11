@@ -1,7 +1,5 @@
-from re import findall
 class Variables:
     VARIABLES = {}
-    OBJECTS = {}
 
     def is_exists(self, key):
         return False if self.VARIABLES.get(key) is None else True

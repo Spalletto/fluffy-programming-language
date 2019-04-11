@@ -1,6 +1,10 @@
-from lexer import *
-from expressions import *
-from statement import *
+from expressions import (BinaryExpression, CircleObject, ConditionalExpression,
+                         ConstantExpression, DrawObject, PointObject,
+                         PolygonObject, UnaryExpression, ValueExpression)
+from lexer import DRAW_FUCNTIONS, TOKENS, VAR_SUBTYPES, Token
+from statement import (AssignStatement, BlockStatement, DrawStatement,
+                       ForStatement, IfStatement, PrintStatement,
+                       WhileStatement)
 
 
 class Parser:
@@ -42,9 +46,6 @@ class Parser:
             return PrintStatement(self.expression())
         elif self.current_token.value == 'draw':
             return DrawStatement(*self.draw_statement())
-        elif self.current_token.value == 'clear':
-            self.clear_statement()
-            return ClearStatement()
         elif self.match('IF'):
             return self.ifelse_statement()
         elif self.match('WHILE'):
