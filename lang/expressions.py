@@ -1,4 +1,7 @@
 from variables import *
+from descartes import PolygonPatch
+from shapely.geometry import Point, Polygon
+from ast import literal_eval
 
 
 class Expression:
@@ -120,25 +123,25 @@ class CircleObject(Expression):
         self.radius = radius
 
     def evaluate(self):
-        return "Circle(({}, {}), r={})".format(self.center.x.evaluate(), self.center.y.evaluate(), self.radius.evaluate())
+        return Point(self.center.x.evaluate(), self.center.y.evaluate()).buffer(self.radius.evaluate())
 
     def __str__(self):
-        return self.evaluate()
+        return "Circle(({}, {}), r={})".format(self.center.x.evaluate(), self.center.y.evaluate(), self.radius.evaluate())
 
 
 class PolygonObject(Expression):
     def __init__(self, points):
         self.points = points
+        self.evaluated_points = []
 
     def evaluate(self):
-        evaluated_points = []
         for point in self.points:
-            evaluated_points.append(point.evaluate())
-        evaluated_points = tuple(map(str, evaluated_points))
-        return "Polygon(" + ', '.join(evaluated_points) + ')'
+            self.evaluated_points.append(point.evaluate())
+       
+        return Polygon(self.evaluated_points)
 
     def __str__(self):
-        return self.evaluate()
+        return "Polygon(" + ', '.join(self.evaluated_points) + ')'
 
 
 class PointObject(Expression):
@@ -160,7 +163,20 @@ class DrawObject(Expression):
         self.obj2 = obj2
 
     def evaluate(self):
-        return "DrawObject({}, {}, {})".format(self.function, self.obj1.evaluate(), self.obj1.evaluate())
+        variable1 = variables.get(self.obj1)['value']
+        variable2 = variables.get(self.obj2)['value']
+        if self.function == 'intersection':
+            figure = variable1.intersection(variable2)
+        elif self.function == 'union':
+            figure = variable1.union(variable2)
+        elif self.function == 'difference':
+            figure = variable1.difference(variable2)
+        elif self.function == 'symmetric_difference':
+            figure = variable1.symmetric_difference(variable2)
+        else:
+            raise NameError("There is no such a function: {}".format(self.function))
+        
+        return figure
 
     def __str__(self):
-        return self.evaluate()
+        return "DrawObject({}, {}, {})".format(self.function, self.obj1, self.obj2)

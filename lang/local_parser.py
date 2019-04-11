@@ -73,8 +73,7 @@ class Parser:
         if (self.match('VARIABLE') or self.match('WORD')) and self.get(0).type == "EQUAL":
             self.consume('EQUAL')
             if self.current_token.type is TOKENS['WORD'] and self.current_token.value in VAR_SUBTYPES:
-                _object = self.object_statement()
-                result = AssignStatement(variable, _object)
+                result = AssignStatement(variable, self.object_statement())
             else:
                 result = AssignStatement(variable, self.expression())
             return result
@@ -105,7 +104,7 @@ class Parser:
             object2 = self.consume('COMMA').value
             self.consume('WORD')
             self.consume('RPAREN')
-            return DrawObject(function.value, ConstantExpression(object1), ConstantExpression(object2)) 
+            return DrawObject(function.value, object1, object2) 
 
     def point_statement(self):
         self.consume('LBRACKET')

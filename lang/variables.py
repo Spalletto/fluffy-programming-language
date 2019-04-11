@@ -18,11 +18,6 @@ class Variables:
                 'type': type,
                 'value': value
             }
-    
-    def add_object(self, key, value):
-        self.OBJECTS[key] = value
 
-    def get_object(self, key):
-        return self.OBJECTS[key]
 
 variables = Variables()
