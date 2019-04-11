@@ -1,4 +1,3 @@
-import random
 import sys
 
 import matplotlib.pyplot as plt
@@ -10,7 +9,6 @@ from matplotlib.backends.backend_qt5agg import \
 from PyQt5.QtWidgets import (QApplication, QDialog, QHBoxLayout,
                              QPlainTextEdit, QPushButton, QVBoxLayout)
 from PyQt5.QtGui import QIcon
-from shapely.geometry import Point, Polygon
 
 from lexer import Lexer, PATCHES
 from local_parser import Parser
