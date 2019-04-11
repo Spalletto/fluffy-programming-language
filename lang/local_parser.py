@@ -5,6 +5,7 @@ from lexer import DRAW_FUCNTIONS, TOKENS, VAR_SUBTYPES, Token
 from statement import (AssignStatement, BlockStatement, DrawStatement,
                        ForStatement, IfStatement, PrintStatement,
                        WhileStatement)
+from signals import output
 
 
 class Parser:
@@ -79,7 +80,8 @@ class Parser:
                 result = AssignStatement(variable, self.expression())
             return result
         
-        raise RuntimeError("Error when assignment")
+        output.send("Syntax Error")
+        return
 
     def object_statement(self):
         function = self.current_token
@@ -207,11 +209,12 @@ class Parser:
             self.match('RPAREN')
             return result
         else:
-            raise RuntimeError("Unknown Expression")
+            output.send("Unknown Expression")
 
     def consume(self, token_type):
         if self.current_token.type != token_type:
-            raise TypeError("Inappropriate type: Got {}, but {} expected.".format(self.current_token.type, token_type))
+            output.send("Inappropriate type: Got {}, but {} expected.".format(self.current_token.type, token_type))
+            return
         else:
             self.position += 1
             return self.current_token 

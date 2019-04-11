@@ -1,6 +1,9 @@
 from descartes import PolygonPatch
 from lexer import PATCHES
 from variables import variables
+from signals import output
+from shapely.geometry.multipolygon import MultiPolygon
+from shapely.geometry.polygon import Polygon
 
 class Statement:
     def execute(self):
@@ -15,7 +18,8 @@ class AssignStatement(Statement):
     
     def execute(self):
         self.result = self.expression.evaluate()
-        variables.add(self.variable, self.result)
+        if self.result != None:
+            variables.add(self.variable, self.result)
 
     def __str__(self):
         return "AssignStatement({}: {})".format(
@@ -31,7 +35,9 @@ class PrintStatement(Statement):
         self.expression = expression
 
     def execute(self):
-        print(self.expression.evaluate())
+        result = self.expression.evaluate()
+        if result:
+            output.send(str(result))
 
     def __str__(self):
         return "PrintStatement(Text: '{}')".format(
@@ -46,6 +52,9 @@ class DrawStatement(Statement):
 
     def execute(self):
         variable = self.variable.evaluate()
+        if not isinstance(variable, (MultiPolygon, Polygon)):
+            output.send("Only figure types can be drawn, not {}".format(type(variable)))
+            return
         patch = PolygonPatch(variable, fc=self.color)
         PATCHES.append(patch)
 

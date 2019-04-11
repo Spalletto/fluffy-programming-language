@@ -1,6 +1,7 @@
 from variables import variables
 from shapely.geometry import Point, Polygon
 from ast import literal_eval
+from signals import output
 
 
 class Expression:
@@ -32,7 +33,8 @@ class ConstantExpression(Expression):
     def evaluate(self):
         result = variables.VARIABLES.get(self.name)
         if result is None: 
-            raise NameError("Variable '{}' doesn't exist".format(self.name))
+            output.send("Variable '{}' doesn't exist".format(self.name))
+            return
         else: 
             return result['value']
 
@@ -70,6 +72,9 @@ class BinaryExpression(Expression):
         self.value2 = value2
         
     def evaluate(self):
+        if type(self.value1.evaluate()) != type(self.value2.evaluate()):
+            output.send("Unsupported operand types.") 
+            return
         if self.operator is '+':
             return self.value1.evaluate() + self.value2.evaluate() 
         elif self.operator is '-':
@@ -77,10 +82,13 @@ class BinaryExpression(Expression):
         elif self.operator is '*':
             return self.value1.evaluate() * self.value2.evaluate() 
         elif self.operator is '/':
-            if self.value2 == 0: raise ZeroDivisionError()
+            if self.value2 == 0: 
+                output.send("Zero division error")
+                return
             return self.value1.evaluate() // self.value2.evaluate() 
         else:
-            raise TypeError("Unknown operator")
+            output.send("Unknown operator")
+            return
     
     def __str__(self):
         return "BinaryExp('{}', '{}', '{}')".format(
@@ -105,7 +113,8 @@ class ConditionalExpression(Expression):
         elif self.operator is '>':
             return int(self.expr1.evaluate() > self.expr2.evaluate())
         else:
-            raise TypeError("Unknown operator")
+            output.send("Unknown operator")
+            return
 
     def __str__(self):
         return "ConditionalExp('{}', '{}', '{}')".format(
@@ -122,10 +131,25 @@ class CircleObject(Expression):
         self.radius = radius
 
     def evaluate(self):
+        x = self.center.x.evaluate()
+        y = self.center.y.evaluate()
+        r = self.radius.evaluate()
+
+        if type(x) is not int:
+            output.send("Wrong values for point. X must be int, got {}".format(type(x)))
+            return
+        elif type(x) is not int:
+            output.send("Wrong values for point. Y must be int, got {}".format(type(y)))
+            return
+        elif type(r) is not int:
+            output.send("Wrong values for radius. It must be int, got {}".format(type(r)))
+            return
+
         return Point(self.center.x.evaluate(), self.center.y.evaluate()).buffer(self.radius.evaluate())
 
     def __str__(self):
-        return "Circle(({}, {}), r={})".format(self.center.x.evaluate(), self.center.y.evaluate(), self.radius.evaluate())
+        return "Circle(({}, {}), r={})".format(
+            self.center.x.evaluate(), self.center.y.evaluate(), self.radius.evaluate())
 
 
 class PolygonObject(Expression):
@@ -149,7 +173,14 @@ class PointObject(Expression):
         self.y = y
 
     def evaluate(self):
-        return (self.x.evaluate(), self.y.evaluate())
+        x = self.x.evaluate()
+        y = self.y.evaluate()
+
+        if type(x) is not int or type(y) is not int:
+            output.send("Wrong values for point. Must be int, got {} and {}".format(type(x), type(y)))
+            return
+            
+        return (x, y)
 
     def __str__(self):
         return "Point({}; {})".format(self.x, self.y)
@@ -164,6 +195,7 @@ class DrawObject(Expression):
     def evaluate(self):
         variable1 = variables.get(self.obj1)['value']
         variable2 = variables.get(self.obj2)['value']
+        
         if self.function == 'intersection':
             figure = variable1.intersection(variable2)
         elif self.function == 'union':
@@ -173,7 +205,7 @@ class DrawObject(Expression):
         elif self.function == 'symmetric_difference':
             figure = variable1.symmetric_difference(variable2)
         else:
-            raise NameError("There is no such a function: {}".format(self.function))
+            output.send("There is no such a function: {}".format(self.function))
         
         return figure
 
